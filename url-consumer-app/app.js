@@ -22,6 +22,10 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/ready', (req, res) => {
+  res.sendStatus(200);
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

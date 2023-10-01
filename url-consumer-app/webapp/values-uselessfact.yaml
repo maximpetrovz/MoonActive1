@@ -1,0 +1,18 @@
+replicaCount: 1
+image:
+  repository: 567376135918.dkr.ecr.eu-central-1.amazonaws.com/url-consumer-app
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  port: 80
+  type: ClusterIP
+environment:
+  API_URL: "https://uselessfacts.jsph.pl"
+ingress:
+  enabled: true
+funny_ingress:
+  enabled: false
+useless_ingress:
+  enabled: true
+serviceAccount:
+  create: false
