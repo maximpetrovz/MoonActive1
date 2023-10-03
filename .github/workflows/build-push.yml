@@ -26,11 +26,6 @@ jobs:
         region: ${{ secrets.AWS_REGION }}
         local-image: url-consumer-app-test
         image: url-consumer-app-test:${{ github.sha }}
-        
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
     - name: Update the relevant helm chart
       run: |
         aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name ${{ secrets.EKS_NAME }}
