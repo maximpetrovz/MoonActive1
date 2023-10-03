@@ -2,13 +2,15 @@ name: Build and push image for desired service
 
 on:
   workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service name'     
+        required: true
 
 jobs:
 
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
@@ -24,3 +26,13 @@ jobs:
         region: ${{ secrets.AWS_REGION }}
         local-image: url-consumer-app-test
         image: url-consumer-app-test:${{ github.sha }}
+        
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Update the relevant helm chart
+      run: |
+        aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name ${{ secrets.EKS_NAME }}
+        cd ./url-consumer-app
+        helm install ${{ github.event.inputs.service }} ./webapp --values ./webapp/values-${{ github.event.inputs.service }}.yaml
