@@ -35,4 +35,4 @@ jobs:
       run: |
         aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name ${{ secrets.EKS_NAME }}
         cd ./url-consumer-app
-        helm install ${{ github.event.inputs.service }} ./webapp --values ./webapp/values-${{ github.event.inputs.service }}.yaml
+        helm upgrade --install ${{ github.event.inputs.service }} ./webapp --values ./webapp/values-${{ github.event.inputs.service }}.yaml
