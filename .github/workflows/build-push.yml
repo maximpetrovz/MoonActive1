@@ -1,4 +1,4 @@
-name: Build image for desired service
+name: Build and push image for desired service
 
 on:
   workflow_dispatch:
@@ -15,4 +15,12 @@ jobs:
       run: |
         cd ./url-consumer-app
         docker build -t url-consumer-app-test . 
-        docker tag url-consumer-app-test:latest 567376135918.dkr.ecr.eu-central-1.amazonaws.com/url-consumer-app:latest
+    - name: Push to ECR
+      id: ecr
+      uses: jwalton/gh-ecr-push@v1
+      with:
+        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        region: ${{ secrets.AWS_REGION }}
+        local-image: url-consumer-app-test
+        image: url-consumer-app-test:${{ github.sha }}
